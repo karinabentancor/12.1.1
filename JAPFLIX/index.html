@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Japflix</title>
-
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/style.css">
@@ -17,14 +16,18 @@
     <div class="text-center container">
       <div class="row py-lg-3">
         <div class="col-lg-6 col-md-8 mx-auto">
-          <h1 class="fw-light"><img src="img/japflix.png" alt=""></h1>
-          <input type="search" class="form-control" id="inputBuscar" placeholder="Ej.: The Lion King">
+          <h1 class="fw-light">
+            <img src="img/japflix.png" alt="Logo de Japflix">
+          </h1>
+          <input type="search" class="form-control" id="inputBuscar" placeholder="Ej.: The Lion King" oninput="filterMovies()">
         </div>
       </div>
     </div>
 
     <div class="album">
-      <ul class="list-group container" id="lista"></ul>
+      <ul class="list-group container" id="lista">
+        
+      </ul>
     </div>
   </main>
 
@@ -35,5 +38,5 @@
       <p class="mb-1">Generado con fines estrictamente educativos.</p>
     </div>
   </footer>
-</body>
+  </body>
 </html>

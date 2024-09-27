@@ -1,42 +1,57 @@
- let movies = []; 
+let movies = [];
 
-  document.addEventListener('DOMContentLoaded', function() {
-    fetch('https://japceibal.github.io/japflix_api/movies-data.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
+
+fetch('https://japceibal.github.io/japflix_api/movies-data.json')
+    .then(response => response.json())
+    .then(data => {
         movies = data; 
-        renderMovies(movies); 
-      })
-      .catch(error => {
-        console.error('Solicitud no exitosa', error);
-      });
+    })
+    .catch(error => console.error('Error al cargar los datos:', error));
 
-    // Evento de entrada para filtrar mientras se escribe
-    document.getElementById('inputBuscar').addEventListener('input', function() {
-      const query = this.value.toLowerCase();
-      const filteredMovies = movies.filter(movie => movie.title.toLowerCase().includes(query));
-      renderMovies(filteredMovies);
-    });
-  });
-
-  function renderMovies(movies) {
+function displayMovies(moviesToShow) {
     const lista = document.getElementById('lista');
-    lista.innerHTML = '';
+    lista.innerHTML = ''; 
 
-    if (movies.length === 0) {
-      lista.innerHTML = '<li class="list-group-item">No se encontraron resultados.</li>';
-      return;
+    if (moviesToShow.length === 0) {
+        lista.innerHTML = '<li class="list-group-item">No se encontraron resultados.</li>';
+        return;
     }
 
-    movies.forEach(movie => {
-      const li = document.createElement('li');
-      li.className = 'list-group-item';
-      li.textContent = movie.title; 
-      lista.appendChild(li);
+    moviesToShow.forEach(movie => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item';
+        listItem.innerHTML = `
+            <div class="card d-flex flex-row align-items-center justify-content-between">
+                <div class="card-content">
+                    <h5 class="card-title">${movie.title}</h5>
+                    <p class="card-tagline">${movie.tagline || 'Sin lema'}</p>
+                </div>
+                <div class="rating">
+                    ${'<span class="fa fa-star checked"></span>'.repeat(Math.round(movie.vote_average / 2))}
+                    ${'<span class="fa fa-star"></span>'.repeat(5 - Math.round(movie.vote_average / 2))}
+                </div>
+            </div>
+        `;
+        lista.appendChild(listItem);
     });
-  }
+}
+
+function filterMovies() {
+    const input = document.getElementById('inputBuscar').value.toLowerCase();
+
+    if (input.trim() === '') {
+        document.getElementById('lista').innerHTML = ''; 
+        return;
+    }
+
+    const filteredMovies = movies.filter(movie => 
+        movie.title.toLowerCase().includes(input) ||
+        (movie.tagline && movie.tagline.toLowerCase().includes(input)) ||
+        (movie.overview && movie.overview.toLowerCase().includes(input))
+    );
+
+    
+    displayMovies(filteredMovies);
+}
+
+document.getElementById('inputBuscar').addEventListener('input', filterMovies);
