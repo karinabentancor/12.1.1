@@ -1,12 +1,15 @@
 let movies = [];
 
-
 fetch('https://japceibal.github.io/japflix_api/movies-data.json')
     .then(response => response.json())
     .then(data => {
         movies = data; 
     })
-    .catch(error => console.error('Error al cargar los datos:', error));
+    .catch(error => {
+        console.error('Error al cargar los datos:', error);
+        const lista = document.getElementById('lista');
+        lista.innerHTML = '<li class="list-group-item">Error al cargar películas.</li>';
+    });
 
 function displayMovies(moviesToShow) {
     const lista = document.getElementById('lista');
@@ -21,7 +24,7 @@ function displayMovies(moviesToShow) {
         const listItem = document.createElement('li');
         listItem.className = 'list-group-item';
         listItem.innerHTML = `
-            <div class="card d-flex flex-row align-items-center justify-content-between">
+            <div class="card d-flex flex-row align-items-center justify-content-between" style="cursor: pointer;" data-movie-id="${movie.id}">
                 <div class="card-content">
                     <h5 class="card-title">${movie.title}</h5>
                     <p class="card-tagline">${movie.tagline || 'Sin lema'}</p>
@@ -32,26 +35,52 @@ function displayMovies(moviesToShow) {
                 </div>
             </div>
         `;
+
+        listItem.addEventListener('click', () => showMovieDetails(movie));
+
         lista.appendChild(listItem);
     });
 }
 
-function filterMovies() {
-    const input = document.getElementById('inputBuscar').value.toLowerCase();
+            function showMovieDetails(movie) {
+                const offcanvasTitle = document.getElementById('offcanvasTopLabel');
+                const movieOverview = document.getElementById('movieOverview');
+                const movieGenres = document.getElementById('movieGenres');
 
-    if (input.trim() === '') {
-        document.getElementById('lista').innerHTML = ''; 
-        return;
-    }
+                offcanvasTitle.textContent = movie.title;
+                movieOverview.textContent = movie.overview;
 
-    const filteredMovies = movies.filter(movie => 
-        movie.title.toLowerCase().includes(input) ||
-        (movie.tagline && movie.tagline.toLowerCase().includes(input)) ||
-        (movie.overview && movie.overview.toLowerCase().includes(input))
-    );
+            movieGenres.innerHTML = '';
+            movie.genres.forEach(genre => {
+                const listItem = document.createElement('li');
+                listItem.textContent = genre.name;
+                movieGenres.appendChild(listItem);
+            });
 
-    
-    displayMovies(filteredMovies);
+    const offcanvas = new bootstrap.Offcanvas(document.getElementById('movieOffcanvas'));
+    offcanvas.show();
 }
 
-document.getElementById('inputBuscar').addEventListener('input', filterMovies);
+    function filterMovies() {
+        const input = document.getElementById('inputBuscar').value.toLowerCase();
+
+        if (input.trim() === '') {
+            document.getElementById('lista').innerHTML = ''; 
+            return;
+        }
+
+        const filteredMovies = movies.filter(movie => 
+            movie.title.toLowerCase().includes(input) ||
+            (movie.tagline && movie.tagline.toLowerCase().includes(input)) ||
+            (movie.overview && movie.overview.toLowerCase().includes(input))
+        );
+
+        displayMovies(filteredMovies);
+    }
+
+
+document.getElementById('inputBuscar').addEventListener('input', function() {
+    let timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(filterMovies, 300);
+});
