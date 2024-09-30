@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="es">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,19 +28,25 @@
     </div>
   </main>
 
-            <div class="offcanvas offcanvas-top bg-dark text-light" tabindex="-1" id="movieOffcanvas" aria-labelledby="offcanvasTopLabel">
-              <div class="offcanvas-header">
-                <h5 id="offcanvasTopLabel" class="offcanvas-title"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-              </div>
-              <div class="offcanvas-body text-light">
-                <p id="movieOverview"></p>
-                <h6>Géneros:</h6>
-                <ul id="movieGenres"></ul>
-              </div>
-            </div>
+  <div class="offcanvas offcanvas-top bg-dark text-light" tabindex="-1" id="movieOffcanvas" aria-labelledby="offcanvasTopLabel">
+    <div class="offcanvas-header">
+      <h5 id="offcanvasTopLabel" class="offcanvas-title"></h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body text-light">
+      <p id="movieOverview"></p>
+      <h6>Géneros:</h6>
+      <ul id="movieGenres"></ul>
+      <div class="btn-group dropup float-end" style="margin-top: 10px;">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Más info
+        </button>
+        <ul class="dropdown-menu" id="dropdownDetalles"></ul>
+      </div>
+    </div>
+  </div>
 
-  <footer class="text-muted py-3">
+  <footer class="text-muted py-5">
     <div class="container">
       <p class="float-end mb-1"><a href="#">Volver arriba</a></p>
       <p class="mb-1">Este sitio forma parte de <a href="https://jovenesaprogramar.edu.uy/" target="_blank">Jovenes a Programar</a>.</p>

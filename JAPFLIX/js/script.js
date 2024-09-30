@@ -29,7 +29,7 @@ function displayMovies(moviesToShow) {
                     <h5 class="card-title">${movie.title}</h5>
                     <p class="card-tagline">${movie.tagline || 'Sin lema'}</p>
                 </div>
-                <div class="rating">
+                <div class="rating"> 
                     ${'<span class="fa fa-star checked"></span>'.repeat(Math.round(movie.vote_average / 2))}
                     ${'<span class="fa fa-star"></span>'.repeat(5 - Math.round(movie.vote_average / 2))}
                 </div>
@@ -46,41 +46,47 @@ function displayMovies(moviesToShow) {
                 const offcanvasTitle = document.getElementById('offcanvasTopLabel');
                 const movieOverview = document.getElementById('movieOverview');
                 const movieGenres = document.getElementById('movieGenres');
+                const dropdownDetalles = document.getElementById('dropdownDetalles');
 
                 offcanvasTitle.textContent = movie.title;
                 movieOverview.textContent = movie.overview;
 
-            movieGenres.innerHTML = '';
-            movie.genres.forEach(genre => {
-                const listItem = document.createElement('li');
-                listItem.textContent = genre.name;
-                movieGenres.appendChild(listItem);
-            });
+                movieGenres.innerHTML = '';
+                movie.genres.forEach(genre => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = genre.name;
+                    movieGenres.appendChild(listItem);
+                });
+
+    dropdownDetalles.innerHTML = '';
+    dropdownDetalles.innerHTML += `<li><a class="dropdown-item">Año: ${new Date(movie.release_date).getFullYear()}</a></li>`;
+    dropdownDetalles.innerHTML += `<li><a class="dropdown-item">Duración: ${movie.runtime} min</a></li>`;
+    dropdownDetalles.innerHTML += `<li><a class="dropdown-item">Presupuesto: $${movie.budget.toLocaleString()}</a></li>`;
+    dropdownDetalles.innerHTML += `<li><a class="dropdown-item">Ganancias: $${movie.revenue.toLocaleString()}</a></li>`;
 
     const offcanvas = new bootstrap.Offcanvas(document.getElementById('movieOffcanvas'));
     offcanvas.show();
 }
 
-    function filterMovies() {
-        const input = document.getElementById('inputBuscar').value.toLowerCase();
+            function filterMovies() {
+                const input = document.getElementById('inputBuscar').value.toLowerCase();
 
-        if (input.trim() === '') {
-            document.getElementById('lista').innerHTML = ''; 
-            return;
-        }
+                if (input.trim() === '') {
+                    document.getElementById('lista').innerHTML = ''; 
+                    return;
+                }
 
-        const filteredMovies = movies.filter(movie => 
-            movie.title.toLowerCase().includes(input) ||
-            (movie.tagline && movie.tagline.toLowerCase().includes(input)) ||
-            (movie.overview && movie.overview.toLowerCase().includes(input))
-        );
+                const filteredMovies = movies.filter(movie => 
+                    movie.title.toLowerCase().includes(input) ||
+                    (movie.tagline && movie.tagline.toLowerCase().includes(input)) ||
+                    (movie.overview && movie.overview.toLowerCase().includes(input))
+                );
 
-        displayMovies(filteredMovies);
-    }
+                displayMovies(filteredMovies);
+            }
 
-
-document.getElementById('inputBuscar').addEventListener('input', function() {
-    let timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(filterMovies, 300);
+    document.getElementById('inputBuscar').addEventListener('input', function() {
+        let timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(filterMovies, 300);
 });
